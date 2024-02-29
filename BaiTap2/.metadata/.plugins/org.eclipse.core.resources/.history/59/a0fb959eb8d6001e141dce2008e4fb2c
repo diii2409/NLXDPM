@@ -1,0 +1,33 @@
+package buoi2;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Producer extends Thread {
+    private Buffer buffer;
+    private int productCount = 0;
+
+    public Producer(Buffer buffer) {
+        this.buffer = buffer;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                synchronized (buffer) {
+                    if (!buffer.isFull()) {
+                        Product product = new Product(++productCount, "Product " + productCount);
+                        buffer.put(product);
+                        System.out.println("Sản xuất sản phẩm #" + product.getId());
+                    } else {
+                        System.out.println("Kho đầy - Ngưng sản xuất");
+                    }
+                }
+                Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 3000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+

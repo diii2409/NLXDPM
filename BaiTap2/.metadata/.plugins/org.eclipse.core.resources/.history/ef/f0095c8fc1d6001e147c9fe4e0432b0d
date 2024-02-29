@@ -1,0 +1,21 @@
+package Buoi2;
+
+public class Consumer implements Runnable {
+    private final Warehouse warehouse;
+
+    public Consumer(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(2000);
+                warehouse.consume();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+package Buoi2;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class Main {
+    public static void main(String[] args) {
+        int capacity = 5;
+        Buffer buffer = new Buffer(capacity);
+
+        // Sử dụng một luồng duy nhất để thực hiện cả hai nhiệm vụ producer và consumer
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    int id;
+					String name = "Sản phẩm #" + id++;
+                    Product product = new Product(id, name);
+                    buffer.put(product);
+                    System.out.println("Sản xuất " + product);
+                    Thread.sleep(1000);
+
+                    Product product1 = buffer.get();
+                    System.out.println("Tiêu thụ " + product1);
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Dừng luồng
+        thread.interrupt();
+
+        System.out.println("Đã dừng chương trình!");
+    }
+}
